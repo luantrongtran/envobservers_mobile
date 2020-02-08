@@ -1,0 +1,51 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button>
+                <ion-icon size-md="6" name="settings"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>{{deviceInfo.deviceName}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-icon name="thermometer-outline"></ion-icon>
+<ion-content>
+    <ion-grid>
+        <ion-row *ngFor="let record of data">
+            <ion-col size-md="6">
+                <ion-card color="primary" style="font-size: medium">
+                    <ion-card-header>
+                        <div>
+                            <ion-icon name="alarm"></ion-icon>
+                            {{record.recorded_at | date: 'medium'}}
+                        </div>
+                    </ion-card-header>
+                    <ion-row>
+                        <ion-col>
+                            <ion-icon name="thermometer"></ion-icon>
+                            {{record.temperature}}
+                        </ion-col>
+                        <ion-col>
+                            <ion-icon name="water" class="ion-color-primary"></ion-icon>
+                            {{record.humidity}}
+                        </ion-col>
+                        <ion-col>
+                            <ion-icon name="earth"></ion-icon>
+                            Soil: {{record.soil_moisture}}
+                        </ion-col>
+                    </ion-row>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="showMoreParams !== null">
+            <ion-button (click)="showMore()">
+                <ion-icon slot="start" name="add"></ion-icon>
+                Show more
+            </ion-button>
+        </ion-row>
+    </ion-grid>
+</ion-content>

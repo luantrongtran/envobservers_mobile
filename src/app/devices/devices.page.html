@@ -1,0 +1,26 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>devices</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row *ngFor="let device of devicesList">
+            <ion-card>
+                <ion-item>
+                    <ion-card-header>
+                        {{device.deviceName}}
+                    </ion-card-header>
+                    <ion-card-content>
+                        SN: {{device.deviceId}}
+                    </ion-card-content>
+
+                  <a [routerLink]="['/devices', device.deviceId, device.deviceName]" >Details</a>
+                </ion-item>
+            </ion-card>
+
+        </ion-row>
+
+    </ion-grid>
+</ion-content>
