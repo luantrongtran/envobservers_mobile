@@ -1,12 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {EnvObserverData} from '../models/EnvObserverData';
+import {API_SERVER} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DevicesService {
-    static readonly baseUrl = 'http://localhost:3000/';
+    // static readonly baseUrl = 'http://54.254.164.155/';
+    static readonly baseUrl = API_SERVER + '/envobservers';
+    static readonly getDataByDeviceId = DevicesService.baseUrl + '/getData';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -23,6 +26,10 @@ export class DevicesService {
             url += 'deviceId=' + deviceId;
         }
         console.log(url);
-        return this.httpClient.get(url);
+        return this.httpClient.get<any>(url);
+    }
+
+    getDevices(email: string) {
+        this.httpClient.get('');
     }
 }

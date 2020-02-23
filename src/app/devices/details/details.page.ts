@@ -13,9 +13,14 @@ export class DetailsPage implements OnInit {
 
     deviceInfo: EnvObserver;
 
+    // contain the data retrieved from backend
     data: Array<any>;
 
+    // this is the url params to get the next records (more data)
     showMoreParams: string;
+
+    // if the page is trying to load data from backend
+    isLoading: boolean = false;
 
     constructor(private devicesService: DevicesService, private activatedRoute: ActivatedRoute) {
     }
@@ -33,8 +38,10 @@ export class DetailsPage implements OnInit {
     }
 
     fetchData() {
+        this.isLoading = true;
         this.devicesService.getDataByDeviceId(this.deviceInfo.deviceId, null).subscribe(resData => {
             this.data = resData.data;
+            console.log(resData);
 
             this.showMoreParams = null;
             if (resData.links !== undefined) {
@@ -43,9 +50,11 @@ export class DetailsPage implements OnInit {
                 }
             }
 
-            console.log(this.data);
+            // console.log(this.data);
+            this.isLoading = false;
         }, error => {
             console.log(error);
+            this.isLoading = false;
         });
     }
 
@@ -53,6 +62,8 @@ export class DetailsPage implements OnInit {
         if (this.showMoreParams === null) {
             return;
         }
+
+        this.isLoading = true;
         this.devicesService.getDataByDeviceId(this.deviceInfo.deviceId, this.showMoreParams).subscribe(resData => {
             this.data = this.data.concat(resData.data);
 
@@ -62,8 +73,12 @@ export class DetailsPage implements OnInit {
                     this.showMoreParams = resData.links.nextPage.href;
                 }
             }
+
+            this.isLoading = false;
         }, error => {
             console.log(error);
+            this.isLoading = false;
         });
     }
+
 }

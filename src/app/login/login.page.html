@@ -1,0 +1,38 @@
+<ion-header>
+<!--    <ion-toolbar>-->
+<!--        <ion-title>login</ion-title>-->
+<!--    </ion-toolbar>-->
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row *ngFor="let error of errors">
+            <ion-col>
+                <ion-text color="danger">{{error.msg}}</ion-text>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-icon name="mail" position="floating"></ion-icon>
+                <ion-input type='text' placeholder='Email' [(ngModel)]="email"></ion-input>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-icon name="lock"></ion-icon>
+                <ion-input type='password' placeholder='Password' position="floating" [(ngModel)]="password">
+                </ion-input>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col style="text-align: center">
+                <ion-button class="primary" (click)="signIn()">Sign in</ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col style="text-align: center">
+                <a [routerLink]="['/signup']">Sign up</a>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>

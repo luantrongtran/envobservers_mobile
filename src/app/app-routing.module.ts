@@ -4,7 +4,7 @@ import {DetailsPageModule} from './devices/details/details.module';
 import {DevicesPageModule} from './devices/devices.module';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'devices', pathMatch: 'full'},
+    {path: '', redirectTo: 'login', pathMatch: 'full'},
     {
         path: 'devices',
         // component: DevicesPageModule
@@ -12,7 +12,15 @@ const routes: Routes = [
         // children: [
         //     {path: 'details', component: DetailsPageModule}
         // ]
-    }
+    },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'signup',
+    loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
+  }
 ];
 
 @NgModule({

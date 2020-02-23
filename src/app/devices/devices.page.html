@@ -7,19 +7,20 @@
 <ion-content>
     <ion-grid>
         <ion-row *ngFor="let device of devicesList">
-            <ion-card>
-                <ion-item>
-                    <ion-card-header>
-                        {{device.deviceName}}
-                    </ion-card-header>
-                    <ion-card-content>
-                        SN: {{device.deviceId}}
-                    </ion-card-content>
+            <ion-col size-md="6">
+                <ion-card>
+                    <ion-item>
+                        <ion-card-header>
+                            {{device.deviceName}}
+                        </ion-card-header>
+                        <ion-card-content>
+                            SN: {{device.deviceId}}
+                        </ion-card-content>
 
-                  <a [routerLink]="['/devices', device.deviceId, device.deviceName]" >Details</a>
-                </ion-item>
-            </ion-card>
-
+                        <a [routerLink]="['/devices', device.deviceId, device.deviceName]">Details</a>
+                    </ion-item>
+                </ion-card>
+            </ion-col>
         </ion-row>
 
     </ion-grid>

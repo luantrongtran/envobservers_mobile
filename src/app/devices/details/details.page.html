@@ -1,17 +1,23 @@
 <ion-header>
     <ion-toolbar>
         <ion-buttons slot="start">
-            <ion-back-button></ion-back-button>
+            <ion-back-button [defaultHref]="['/devices']"></ion-back-button>
         </ion-buttons>
         <ion-buttons slot="end">
             <ion-button>
                 <ion-icon size-md="6" name="settings"></ion-icon>
             </ion-button>
+            <ion-button *ngIf="isLoading">
+                <ion-spinner name="lines-small">
+                </ion-spinner>
+            </ion-button>
+            <ion-button *ngIf="!isLoading" (click)="fetchData()">
+                <ion-icon name="refresh"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <ion-title>{{deviceInfo.deviceName}}</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-icon name="thermometer-outline"></ion-icon>
 <ion-content>
     <ion-grid>
         <ion-row *ngFor="let record of data">
@@ -33,7 +39,6 @@
                             {{record.humidity}}
                         </ion-col>
                         <ion-col>
-                            <ion-icon name="earth"></ion-icon>
                             Soil: {{record.soil_moisture}}
                         </ion-col>
                     </ion-row>
@@ -42,10 +47,13 @@
         </ion-row>
 
         <ion-row *ngIf="showMoreParams !== null">
-            <ion-button (click)="showMore()">
-                <ion-icon slot="start" name="add"></ion-icon>
-                Show more
-            </ion-button>
+            <ion-col size-md="6" style="margin-left: 10px">
+                <ion-button (click)="showMore()">
+                    <ion-icon slot="start" name="add" *ngIf="!isLoading"></ion-icon>
+                    <ion-spinner slot="end" name="dots" *ngIf="isLoading"></ion-spinner>
+                    Show more
+                </ion-button>
+            </ion-col>
         </ion-row>
     </ion-grid>
 </ion-content>

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DevicesService} from './devices.service';
 import {EnvObserver} from '../models/EnvObserver';
+import {API_SERVER} from '../../environments/environment';
 
 @Component({
     selector: 'app-devices',
@@ -8,8 +9,10 @@ import {EnvObserver} from '../models/EnvObserver';
     styleUrls: ['./devices.page.scss'],
 })
 export class DevicesPage implements OnInit {
+    server: string;
 
     constructor(private devicesService: DevicesService) {
+        this.server = API_SERVER;
     }
 
     devicesList: EnvObserver[] = [];
