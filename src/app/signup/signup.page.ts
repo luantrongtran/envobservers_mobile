@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {AlertController, ToastController} from '@ionic/angular';
 import {Router} from '@angular/router';
+import {PopupUtilsService} from '../popup-utils.service';
 
 @Component({
     selector: 'app-signup',
@@ -11,7 +12,7 @@ import {Router} from '@angular/router';
 export class SignupPage implements OnInit {
 
     constructor(private authService: AuthService, public toastController: ToastController, private alertController: AlertController,
-                private router: Router) {
+                private router: Router, private popupUtilsService: PopupUtilsService) {
     }
 
     email: string = '';
@@ -28,7 +29,7 @@ export class SignupPage implements OnInit {
 
                 // reset the error array
                 this.errors = [];
-                this.presentToast('New User Created. Please check your email');
+                this.popupUtilsService.presentToast('New User Created. Please check your email');
                 this.router.navigateByUrl('/login');
 
                 this.clearForm();
@@ -37,35 +38,7 @@ export class SignupPage implements OnInit {
             });
         };
 
-        this.presentAlert('Do you want to create a new user?', success);
-    }
-
-    async presentToast(msg: string) {
-        const toast = await this.toastController.create({
-            message: msg,
-            position: 'bottom',
-            duration: 3000
-        });
-
-        console.log(toast);
-        toast.present();
-    }
-
-    async presentAlert(msg: string, onsuccess) {
-        const alert = await this.alertController.create({
-            message: msg,
-            buttons: [
-                {
-                    text: 'No'
-                },
-                {
-                    text: 'Yes',
-                    handler: onsuccess
-                }
-            ]
-        });
-
-        await alert.present();
+        this.popupUtilsService.presentAlert('Do you want to create a new user?', success);
     }
 
     clearForm() {

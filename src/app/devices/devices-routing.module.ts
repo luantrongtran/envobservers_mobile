@@ -12,6 +12,10 @@ const routes: Routes = [
     path: ':deviceId/:deviceName',
     loadChildren: () => import('./details/details.module').then( m => m.DetailsPageModule)
     // loadChildren: './details/details.module#DetailsPageModule'
+  },
+  {
+    path: 'new-device',
+    loadChildren: () => import('./new-device/new-device.module').then( m => m.NewDevicePageModule)
   }
 ];
 

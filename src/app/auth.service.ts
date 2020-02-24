@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {API_SERVER} from '../environments/environment';
+import {UserInfo} from './models/UserInfo';
 
 @Injectable({
     providedIn: 'root'
@@ -12,6 +13,7 @@ export class AuthService {
     static readonly SIGN_UP_URL = AuthService.baseUrl + '/signup';
 
     private $token: string;
+    public userInfo: UserInfo;
 
     get token() {
         return this.$token;

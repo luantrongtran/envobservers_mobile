@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Adding New Device</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div *ngIf="isStep1 === true">
+        <ion-card>
+            <ion-card-header><h1>Step 1: Connecting to the EnvObserver device</h1></ion-card-header>
+            <ion-card-content>
+                <ion-text>
+                    <br>
+                    - Go to the phone Wifi settings, and connect to the wifi of the device. Usually the wifi name
+                    contains "EnvObserver"
+                    <br>
+                    - Afterwards, go back to this screen, and click next step
+                </ion-text>
+            </ion-card-content>
+        </ion-card>
+        <div class="button-list">
+            <ion-button [routerLink]="['/devices']" slot="end" color="medium">Cancel</ion-button>
+            <ion-button (click)="goToStep2()">Go to step 2</ion-button>
+        </div>
+    </div>
+
+    <!--   Step 2  -->
+    <div *ngIf="isStep2 === true">
+        <ion-card>
+            <ion-card-header>
+                <h1>Step 2: setup wifi for the device</h1>
+            </ion-card-header>
+            <ion-card-content>
+                <h2>This is to connect the EnvObserver device so it can send data to the Cloud</h2>
+                <ion-text *ngIf="this.deviceInfo.internet.internetStatus === true" color="success">
+                    <b>The EnvObserver device is connected, please go to next step</b>
+                </ion-text>
+
+                <div *ngIf="this.deviceInfo.internet.internetStatus === false">
+                    <ion-text color="danger">
+                        <b>The EnvObserver device is not connected</b>
+                    </ion-text>
+                    <ion-button (click)="showWifiPrompt()">
+                        Setup wifi
+                    </ion-button>
+                </div>
+            </ion-card-content>
+        </ion-card>
+        <div class="button-list">
+            <ion-button [routerLink]="['/devices']" color="medium">Cancel</ion-button>
+            <ion-button (click)="goToStep3()">Go to step 3</ion-button>
+        </div>
+    </div>
+
+    <div *ngIf="isStep3 === true">
+        <ion-card>
+            <ion-card-header>Step 3: activate new device</ion-card-header>
+            <ion-card-content>
+                Device info:
+            </ion-card-content>
+        </ion-card>
+        <div class="button-list">
+            <ion-button [routerLink]="['/devices']" color="medium">Cancel</ion-button>
+            <ion-button>Activate</ion-button>
+        </div>
+    </div>
+</ion-content>

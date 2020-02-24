@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EnvObserverData} from '../models/EnvObserverData';
 import {API_SERVER} from '../../environments/environment';
+import {AuthService} from '../auth.service';
+import {isNullOrUndefined} from 'util';
+import {Observable} from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +14,7 @@ export class DevicesService {
     static readonly baseUrl = API_SERVER + '/envobservers';
     static readonly getDataByDeviceId = DevicesService.baseUrl + '/getData';
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private authService: AuthService) {
     }
 
     /**
@@ -29,7 +32,23 @@ export class DevicesService {
         return this.httpClient.get<any>(url);
     }
 
-    getDevices(email: string) {
-        this.httpClient.get('');
+    /**
+     * Get devices associated with the logged in email
+     * @param email
+     */
+    getAssociatedDevices(): Observable<any> {
+        let userInfo = this.authService.userInfo;
+        if (isNullOrUndefined(userInfo) === true) {
+            return null;
+        } else if (isNullOrUndefined(userInfo.email) || userInfo.email === '') {
+            return null;
+        }
+
+        const httpOptions = {
+            headers: new HttpHeaders({
+                token: this.authService.token
+            })
+        };
+        return this.httpClient.get(DevicesService.baseUrl, httpOptions);
     }
 }
