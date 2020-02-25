@@ -17,10 +17,10 @@ export class DetailsPage implements OnInit {
     data: Array<any>;
 
     // this is the url params to get the next records (more data)
-    showMoreParams: string;
+    showMoreParams: string = null;
 
     // if the page is trying to load data from backend
-    isLoading: boolean = false;
+    isLoading = false;
 
     constructor(private devicesService: DevicesService, private activatedRoute: ActivatedRoute) {
     }
@@ -29,8 +29,8 @@ export class DetailsPage implements OnInit {
         console.log('init details page');
 
         this.activatedRoute.params.subscribe((params: Params) => {
-            let deviceName = params['deviceName'];
-            let deviceId = params['deviceId'];
+            const deviceName = params['deviceName'];
+            const deviceId = params['deviceId'];
             this.deviceInfo = new EnvObserver(deviceId, deviceName);
         });
 
@@ -39,7 +39,7 @@ export class DetailsPage implements OnInit {
 
     fetchData() {
         this.isLoading = true;
-        this.devicesService.getDataByDeviceId(this.deviceInfo.deviceId, null).subscribe(resData => {
+        this.devicesService.getDataByDeviceId(this.deviceInfo._id, null).subscribe(resData => {
             this.data = resData.data;
             console.log(resData);
 
@@ -64,7 +64,7 @@ export class DetailsPage implements OnInit {
         }
 
         this.isLoading = true;
-        this.devicesService.getDataByDeviceId(this.deviceInfo.deviceId, this.showMoreParams).subscribe(resData => {
+        this.devicesService.getDataByDeviceId(this.deviceInfo._id, this.showMoreParams).subscribe(resData => {
             this.data = this.data.concat(resData.data);
 
             this.showMoreParams = null;

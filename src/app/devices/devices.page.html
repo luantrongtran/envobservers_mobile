@@ -12,19 +12,20 @@
 </ion-header>
 
 <ion-content>
+    {{devicesList.length}}
     <ion-grid>
         <ion-row *ngFor="let device of devicesList">
             <ion-col size-md="6">
                 <ion-card>
                     <ion-item>
                         <ion-card-header>
-                            {{device.deviceName}}
+                            {{device.name}}123
                         </ion-card-header>
                         <ion-card-content>
-                            SN: {{device.deviceId}}
+                            SN: {{device._id}}
                         </ion-card-content>
 
-                        <a [routerLink]="['/devices', device.deviceId, device.deviceName]">Details</a>
+                        <a [routerLink]="['/devices', device._id, device.name]">Details</a>
                     </ion-item>
                 </ion-card>
             </ion-col>

@@ -3,3 +3,4 @@ export const environment = {
 };
 
 export const API_SERVER = 'http://54.254.164.155'
+export const DEBUG_MODE = false;

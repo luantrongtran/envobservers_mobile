@@ -9,14 +9,18 @@ import {PopupUtilsService} from '../../popup-utils.service';
     styleUrls: ['./new-device.page.scss'],
 })
 export class NewDevicePage implements OnInit {
-    readonly timeoutMillis = 10000;
+    readonly timeoutMillis = 20000;
 
     // 3 steps to setup a new device
     isStep1 = true;
     isStep2 = false;
     isStep3 = false;
 
-    step1Errors = new Array<string>();
+    // the between step loading
+    isLoading = false;
+
+    // This indicate if the wifi setup process is being happening
+    isSettingWifi = false;
 
     // the EnvObserver device info
     deviceInfo = {
@@ -40,9 +44,11 @@ export class NewDevicePage implements OnInit {
     }
 
     goToStep2() {
-        // Try to access the EnvObserver device wifi
-        // this.popupUtilsService.presentLoading('Connecting to EnvObserver device. Please wait, this may take 1 minute', this.timeoutMillis);
-        this.envObserverService.getInfo().pipe(timeout(this.timeoutMillis)).subscribe(data => {
+        this.isLoading = true;
+        /*
+         Try to access the EnvObserver device wifi
+         */
+        const sub = this.envObserverService.getInfo().pipe(timeout(this.timeoutMillis)).subscribe(data => {
             console.log(data);
             this.deviceInfo = data;
             console.log(this.deviceInfo);
@@ -51,13 +57,16 @@ export class NewDevicePage implements OnInit {
             this.isStep1 = false;
             this.isStep2 = true;
             this.isStep3 = false;
+
         }, errors => {
             // if error, don't go to step 2
             console.log(errors);
             this.popupUtilsService.presentToast('Failed to connect to the EnvObserver device');
         });
-
-
+        // tear down when subscription done
+        sub.add(() => {
+            this.isLoading = false;
+        });
     }
 
     goToStep3() {
@@ -68,9 +77,10 @@ export class NewDevicePage implements OnInit {
 
     showWifiPrompt() {
         const onSuccess = (inputData) => {
+            this.isSettingWifi = true;
+
             // console.log(data);
             this.envObserverService.updateWifi(inputData.ssid.trim(), inputData.pass.trim()).subscribe(resData => {
-                console.log(resData);
                 this.envObserverService.getInfo().pipe(timeout(this.timeoutMillis)).subscribe(data => {
                     console.log(data);
                     this.deviceInfo = data;
@@ -79,21 +89,30 @@ export class NewDevicePage implements OnInit {
                     console.log(errors);
                     this.popupUtilsService.presentToast('Failed to connect to the EnvObserver device');
                 });
+
+                this.isSettingWifi = false;
             }, errors => {
-                console.log(errors);
-                this.popupUtilsService.presentToast(errors.error.msg);
+
+                /**
+                 * Note: if error, it doesn't mean it failed to update the new wifi settings, but because the EnvObserver device
+                 * disconnected due to the process of updating itself with the new wifi settings. Therefore, need to retry to retrieve
+                 * the EnvObserver info again to get the latest Internet status of the EnvObsrver device
+                 */
+
+                // this.popupUtilsService.presentToast(errors.error.msg);
+
+                const getInfoSub = this.envObserverService.getInfo().pipe(timeout(30000)).subscribe(data => {
+                    console.log(data);
+                    this.deviceInfo = data;
+                }, resErrors => {
+                    // if error, don't go to step 2
+                    console.log(resErrors);
+                    this.popupUtilsService.presentToast('Failed to connect to the EnvObserver device');
+                });
+                getInfoSub.add(()=>{
+                    this.isSettingWifi = false;
+                })
             });
-        //         .subscribe(resData => {
-        //         console.log(resData.data);
-        //         this.envObserverService.getInfo().pipe(timeout(this.timeoutMillis)).subscribe(data => {
-        //             console.log(data);
-        //             this.deviceInfo = data;
-        //         }, errors => {
-        //             // if error, don't go to step 2
-        //             console.log(errors);
-        //             this.popupUtilsService.presentToast('Failed to connect to the EnvObserver device');
-        //         });
-        //     });
         };
         const inputs = [
             {
@@ -110,19 +129,5 @@ export class NewDevicePage implements OnInit {
             }
         ];
         this.popupUtilsService.presentPrompt('Please input wifi details', inputs, onSuccess);
-    }
-
-    updatePassword(data) {
-        // console.log(data);
-        // this.envObserverService.updateWifi(ssid, pass).subscribe(resData => {
-        //     this.envObserverService.getInfo().pipe(timeout(this.timeoutMillis)).subscribe(data => {
-        //         this.deviceInfo = data;
-        //         this.popupUtilsService.hideLoading();
-        //     }, errors => {
-        //         // if error, don't go to step 2
-        //         console.log(errors);
-        //         this.popupUtilsService.presentToast('Failed to connect to the EnvObserver device');
-        //     });
-        // });
     }
 }

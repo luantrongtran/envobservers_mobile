@@ -19,7 +19,6 @@ export class DevicesPage implements OnInit {
     devicesList: EnvObserver[] = [];
 
     ngOnInit() {
-        console.log(this.devicesService);
         this.fetchDevices();
     }
 
@@ -27,13 +26,9 @@ export class DevicesPage implements OnInit {
         // const envObs: EnvObserver = new EnvObserver('1', 'device 1');
         // this.devicesList.push(envObs);
 
-        let observable = this.devicesService.getAssociatedDevices();
-        if (observable === null) {
-            return;
-        }
-
-        observable.subscribe(data => {
+        const observable = this.devicesService.getAssociatedDevices().subscribe(data => {
             console.log(data);
+            this.devicesList = data;
         }, errors => {
             console.log(errors);
         });
