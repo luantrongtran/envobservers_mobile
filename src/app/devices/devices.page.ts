@@ -3,6 +3,8 @@ import {DevicesService} from './devices.service';
 import {EnvObserver} from '../models/EnvObserver';
 import {API_SERVER} from '../../environments/environment';
 import {AuthService} from '../auth.service';
+import {PopoverController} from '@ionic/angular';
+import {ProfilePopupMenuComponent} from './profile-popup-menu/profile-popup-menu.component';
 
 @Component({
     selector: 'app-devices',
@@ -12,7 +14,7 @@ import {AuthService} from '../auth.service';
 export class DevicesPage implements OnInit {
     server: string;
 
-    constructor(private devicesService: DevicesService, private authService: AuthService) {
+    constructor(private devicesService: DevicesService, private authService: AuthService, private popOverController: PopoverController) {
         this.server = API_SERVER;
     }
 
@@ -36,5 +38,15 @@ export class DevicesPage implements OnInit {
 
     getDeviceDetailsById(deviceId: string) {
 
+    }
+
+    presentPopover(ev: any) {
+        this.popOverController.create({
+            component: ProfilePopupMenuComponent,
+            event: ev,
+            translucent: true
+        }).then(loadingEle => {
+            loadingEle.present();
+        });
     }
 }

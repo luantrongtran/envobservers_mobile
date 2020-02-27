@@ -4,6 +4,7 @@ import {API_SERVER} from '../environments/environment';
 import {UserInfo} from './models/UserInfo';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class AuthService {
     // private $token: string;
     public userInfo = new BehaviorSubject<UserInfo>(null);
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private router: Router) {
     }
 
     /**
@@ -62,6 +63,11 @@ export class AuthService {
             confirmPassword
         };
         return this.httpClient.post<any>(AuthService.SIGN_UP_URL, body);
+    }
+
+    logout() {
+        this.userInfo.next(null);
+        this.router.navigateByUrl('/login');
     }
 
 }

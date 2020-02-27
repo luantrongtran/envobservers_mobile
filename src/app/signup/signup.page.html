@@ -37,7 +37,11 @@
         <ion-row>
             <ion-col style="text-align: center">
                 <ion-button class="primary" [routerLink]="['/login']">Cancel</ion-button>
-                <ion-button class="primary" (click)="signUp()">Create User</ion-button>
+                <ion-button class="primary" (click)="signUp()" [disabled]="isLoading">
+                    Create User
+                    <ion-spinner name="lines-small" *ngIf="isLoading">
+                    </ion-spinner>
+                </ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>

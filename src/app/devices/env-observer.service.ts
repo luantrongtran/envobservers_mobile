@@ -11,6 +11,7 @@ export class EnvObserverService {
 
     static readonly BASE_API_URL = 'http://192.168.4.1';
     static readonly UPDATE_WIFI_API_URL = EnvObserverService.BASE_API_URL + '/wifi';
+    static readonly ACTIVATE_API_URL = EnvObserverService.BASE_API_URL + '/activate';
 
     constructor(private httpClient: HttpClient) {
     }
@@ -27,5 +28,13 @@ export class EnvObserverService {
         const url = EnvObserverService.UPDATE_WIFI_API_URL + '?ssid=' + ssid + '&pass=' + password;
         console.log(url);
         return this.httpClient.get<any>(url);
+    }
+
+    /**
+     * This is to activate a brand new EnvObserver device.
+     */
+    activateNewDevice(userId: string): Observable<any> {
+        const url = `${EnvObserverService.ACTIVATE_API_URL}?ownerId=${userId}`;
+        return this.httpClient.get(url);
     }
 }

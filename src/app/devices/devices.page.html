@@ -1,18 +1,16 @@
 <ion-header>
     <ion-toolbar>
         <ion-title>devices</ion-title>
-        <ion-buttons slot="end">
-            <!--            <ion-button position="end" [routerLink]="['/devices/new-device']">-->
-            <!--                <ion-icon name="add" slot="start"></ion-icon>-->
-            <!--                New device-->
-            <!--            </ion-button>-->
+        <ion-buttons slot="end" style="margin-right: 20px;">
+            <ion-button slot="end" (click)="presentPopover($event)">
+                <ion-icon name="list" md="md-list">
+                </ion-icon>
+            </ion-button>
         </ion-buttons>
     </ion-toolbar>
-
 </ion-header>
 
 <ion-content>
-    {{devicesList.length}}
     <ion-grid>
         <ion-row *ngFor="let device of devicesList">
             <ion-col size-md="6">

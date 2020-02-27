@@ -15,17 +15,20 @@ export class SignupPage implements OnInit {
                 private router: Router, private popupUtilsService: PopupUtilsService) {
     }
 
-    email: string = '';
-    password: string = '';
-    confirmPassword: string = '';
+    email = '';
+    password = '';
+    confirmPassword = '';
     errors: string[] = new Array();
+    isLoading = false;
 
-    ngOnInit() {}
+    ngOnInit() {
+    }
 
     signUp() {
 
         const success = () => {
-            this.authService.signup(this.email, this.password, this.confirmPassword).subscribe(resData => {
+            this.isLoading = true;
+            const sub = this.authService.signup(this.email, this.password, this.confirmPassword).subscribe(resData => {
 
                 // reset the error array
                 this.errors = [];
@@ -35,6 +38,10 @@ export class SignupPage implements OnInit {
                 this.clearForm();
             }, errors => {
                 this.errors = errors.error.errors;
+            });
+            // finally
+            sub.add(() => {
+                this.isLoading = false;
             });
         };
 

@@ -37,24 +37,28 @@
             <ion-card-content>
                 <h2>This is to connect the EnvObserver device so it can send data to the Cloud</h2>
                 <ion-text *ngIf="this.deviceInfo.internet.internetStatus === true" color="success">
-                    <b>The EnvObserver device is connected, please go to next step</b>
+                    <b>The EnvObserver device is connected</b>
                 </ion-text>
 
                 <div *ngIf="this.deviceInfo.internet.internetStatus === false">
                     <ion-text color="danger">
                         <b>The EnvObserver device is not connected</b>
                     </ion-text>
-                    <ion-button (click)="showWifiPrompt()" [disabled]="isLoading||isSettingWifi">
-                        Setup wifi
-                        <ion-spinner name="lines-small" *ngIf="isSettingWifi">
-                        </ion-spinner>
-                    </ion-button>
                 </div>
+                <ion-button (click)="showWifiPrompt()" [disabled]="isLoading||isSettingWifi">
+                    Setup wifi
+                    <ion-spinner name="lines-small" *ngIf="isSettingWifi">
+                    </ion-spinner>
+                </ion-button>
+                <br>
+                <ion-text *ngIf="isActivated()" color="success">
+                    <ion-text><b>The device has been activated</b></ion-text>
+                </ion-text>
             </ion-card-content>
         </ion-card>
         <div class="button-list">
             <ion-button [routerLink]="['/devices']" color="medium">Cancel</ion-button>
-            <ion-button (click)="goToStep3()" [disabled]="!this.deviceInfo.internet.internetStatus">
+            <ion-button (click)="goToStep3()" [disabled]="!this.deviceInfo.internet.internetStatus||isActivated()">
                 <ion-text>Go to step 3</ion-text>
                 <ion-spinner name="lines-small" *ngIf="isLoading">
                 </ion-spinner>
@@ -67,11 +71,14 @@
             <ion-card-header>Step 3: activate new device</ion-card-header>
             <ion-card-content>
                 Device info:
+                <div *ngFor="let err of step3Errors" color="danger">
+                    <ion-text>{{err.msg}}</ion-text>
+                </div>
             </ion-card-content>
         </ion-card>
         <div class="button-list">
             <ion-button [routerLink]="['/devices']" color="medium">Cancel</ion-button>
-            <ion-button [disabled]="isLoading">
+            <ion-button [disabled]="isLoading" (click)="activateDevice()">
                 <ion-text>Activate</ion-text>
                 <ion-spinner name="lines-small" *ngIf="isLoading">
                 </ion-spinner>

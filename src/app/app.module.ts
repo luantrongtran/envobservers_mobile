@@ -10,9 +10,10 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AddAuthenticationHeaderInterceptorService} from './interceptors/add-authentication-header-interceptor.service';
+import {ProfilePopupMenuComponent} from './devices/profile-popup-menu/profile-popup-menu.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ProfilePopupMenuComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
   providers: [

@@ -14,22 +14,25 @@ import {DEBUG_MODE} from '../../environments/environment';
 })
 export class LoginPage implements OnInit {
 
-    private email: string;
-    private password: string;
-    private errors: [];
+    email: string;
+    password: string;
+    errors: [];
+
+    isLoading = false;
 
     constructor(private authService: AuthService, private router: Router) {
     }
 
     ngOnInit() {
-        if(DEBUG_MODE) {
-            this.email = 'aaa@email.com';
+        if (DEBUG_MODE) {
+            this.email = 'test@email.com';
             this.password = '123456';
         }
     }
 
     signIn() {
-        this.authService.login(this.email, this.password).subscribe(data => {
+        this.isLoading = true;
+        const sub = this.authService.login(this.email, this.password).subscribe(data => {
             // decode the token to get the user info
             const decodedToken = jwt_decode(data.token);
 
@@ -38,17 +41,22 @@ export class LoginPage implements OnInit {
             if (isNullOrUndefined(data.name)) {
                 name = data.name;
             }
-            const userInfo = new UserInfo(decodedToken.user.userId, decodedToken.user.email, decodedToken.user.name,
+            const userInfo = new UserInfo(decodedToken.user.userId, data.email, data.name,
                 data.token);
             console.log(decodedToken);
             console.log(userInfo);
 
             this.authService.userInfo.next(userInfo);
 
+
             // Navigate to the devices page
             this.router.navigateByUrl('/devices');
         }, errors => {
             this.errors = errors.error.errors;
+        });
+        // finally
+        sub.add(() => {
+            this.isLoading = false;
         });
     }
 

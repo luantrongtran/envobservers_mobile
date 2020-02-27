@@ -26,7 +26,11 @@
         </ion-row>
         <ion-row>
             <ion-col style="text-align: center">
-                <ion-button class="primary" (click)="signIn()">Sign in</ion-button>
+                <ion-button class="primary" (click)="signIn()" [disabled]="isLoading">
+                    Sign in
+                    <ion-spinner name="lines-small" *ngIf="isLoading">
+                    </ion-spinner>
+                </ion-button>
             </ion-col>
         </ion-row>
         <ion-row>
