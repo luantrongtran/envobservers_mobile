@@ -33,23 +33,6 @@ export class LoginPage implements OnInit {
     signIn() {
         this.isLoading = true;
         const sub = this.authService.login(this.email, this.password).subscribe(data => {
-            // decode the token to get the user info
-            const decodedToken = jwt_decode(data.token);
-
-            // Saving user info
-            let name = '';
-            if (isNullOrUndefined(data.name)) {
-                name = data.name;
-            }
-            const userInfo = new UserInfo(decodedToken.user.userId, data.email, data.name,
-                data.token);
-            console.log(decodedToken);
-            console.log(userInfo);
-
-            this.authService.userInfo.next(userInfo);
-
-
-            // Navigate to the devices page
             this.router.navigateByUrl('/devices');
         }, errors => {
             this.errors = errors.error.errors;
@@ -58,6 +41,10 @@ export class LoginPage implements OnInit {
         sub.add(() => {
             this.isLoading = false;
         });
+    }
+
+    persistAuthDate() {
+
     }
 
 }

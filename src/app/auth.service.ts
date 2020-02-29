@@ -3,8 +3,10 @@ import {HttpClient} from '@angular/common/http';
 import {API_SERVER} from '../environments/environment';
 import {UserInfo} from './models/UserInfo';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {map, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import {isNullOrUndefined} from 'util';
+import * as jwt_decode from 'jwt-decode';
 
 @Injectable({
     providedIn: 'root'
@@ -53,7 +55,19 @@ export class AuthService {
             email,
             password
         };
-        return this.httpClient.post<any>(AuthService.SIGN_IN_URL, body);
+        return this.httpClient.post<any>(AuthService.SIGN_IN_URL, body).pipe(tap(data => {
+            // decode the token to get the user info
+            const decodedToken = jwt_decode(data.token);
+
+            // Saving user info
+            let name = '';
+            if (isNullOrUndefined(data.name)) {
+                name = data.name;
+            }
+            this.setAuthData(decodedToken.user.userId, data.email, data.name,
+                data.token);
+        }));
+
     }
 
     signup(email: string, password: string, confirmPassword: string) {
@@ -70,4 +84,9 @@ export class AuthService {
         this.router.navigateByUrl('/login');
     }
 
+    setAuthData(userId: string, email: string, name: string, token: string): void {
+        const userInfo = new UserInfo(userId, email, name,
+            token);
+        this.userInfo.next(userInfo);
+    }
 }
