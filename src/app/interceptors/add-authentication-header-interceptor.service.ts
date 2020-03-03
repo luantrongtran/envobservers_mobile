@@ -17,16 +17,18 @@ export class AddAuthenticationHeaderInterceptorService implements HttpIntercepto
 
         return this.authService.getUserInfo().pipe(take(1), mergeMap(userInfo => {
             if (userInfo != null) {
+                console.log(userInfo.token);
                 const newReq = req.clone({
                     setHeaders: {
                         token: userInfo.token
                     }
                 });
 
+                console.log(newReq.headers);
+
                 return next.handle(newReq);
             }
 
-            console.log(req.headers);
 
             return next.handle(req.clone());
 

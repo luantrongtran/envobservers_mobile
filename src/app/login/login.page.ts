@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
 import {Router} from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
-import {decode} from 'punycode';
-import {isNullOrUndefined} from 'util';
 import {UserInfo} from '../models/UserInfo';
 import {DEBUG_MODE} from '../../environments/environment';
 
@@ -35,7 +33,10 @@ export class LoginPage implements OnInit {
         const sub = this.authService.login(this.email, this.password).subscribe(data => {
             this.router.navigateByUrl('/devices');
         }, errors => {
-            this.errors = errors.error.errors;
+            console.log(errors);
+            if (errors.error && errors.error.errors) {
+                this.errors = errors.error.errors;
+            }
         });
         // finally
         sub.add(() => {

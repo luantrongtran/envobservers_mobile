@@ -38,54 +38,12 @@ export class DevicesService {
      * @param email
      */
     getAssociatedDevices(): Observable<any> {
-       return this.authService.getUserInfo().pipe(take(1), switchMap(userInfo => {
+        return this.authService.getUserInfo().pipe(take(1), switchMap(userInfo => {
             if (isNullOrUndefined(userInfo)) {
                 throw new Error('No user info found for the current logging');
             }
 
-            // const httpOptions = {
-            //     headers: new HttpHeaders({
-            //         'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8',
-            //         token: userInfo.token
-            //     })
-            // };
             return this.httpClient.get(DevicesService.baseUrl);
         }));
-
-        // return this.authService.getUserId().pipe(take(1), switchMap(userInfo => {
-        //     const httpOptions = {
-        //         // headers: new HttpHeaders({
-        //         //     token: userInfo.token
-        //         // })
-        //     };
-        //     return this.httpClient.get(DevicesService.baseUrl, httpOptions);
-        // }));
-
-        //     .subscribe(userId => {
-        //     if (isNullOrUndefined(userId)) {
-        //         throw new Error('No userId found in logged user\'s info)';
-        //     }
-        //
-        //     const httpOptions = {
-        //         headers: new HttpHeaders({
-        //             token: this.authService.token
-        //         })
-        //     };
-        //     return this.httpClient.get(DevicesService.baseUrl, httpOptions);
-        // });
-
-        // let userInfo = this.authService.userInfo;
-        // if (isNullOrUndefined(userInfo) === true) {
-        //     return null;
-        // } else if (isNullOrUndefined(userInfo.email) || userInfo.email === '') {
-        //     return null;
-        // }
-        //
-        // const httpOptions = {
-        //     headers: new HttpHeaders({
-        //         token: this.authService.token
-        //     })
-        // };
-        // return this.httpClient.get(DevicesService.baseUrl, httpOptions);
     }
 }

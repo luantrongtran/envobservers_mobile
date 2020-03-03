@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {EnvObserverService} from '../env-observer.service';
-import {timeout} from 'rxjs/operators';
+import {take, timeout} from 'rxjs/operators';
 import {PopupUtilsService} from '../../popup-utils.service';
 import {AuthService} from '../../auth.service';
 import {error, isNull, isNullOrUndefined} from 'util';
@@ -94,7 +94,7 @@ export class NewDevicePage implements OnInit {
      */
     activateDevice() {
         this.isLoading = true;
-        const sub = this.authService.getUserInfo().subscribe(userInfo => {
+        const sub = this.authService.getUserInfo().pipe(take(1)).subscribe(userInfo => {
             if (isNullOrUndefined(userInfo) || isNullOrUndefined(userInfo.userId)) {
                 this.popupUtilsService.presentToast('Failed to activate the device');
                 this.isLoading = false;

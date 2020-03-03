@@ -5,6 +5,7 @@ import {API_SERVER} from '../../environments/environment';
 import {AuthService} from '../auth.service';
 import {PopoverController} from '@ionic/angular';
 import {ProfilePopupMenuComponent} from './profile-popup-menu/profile-popup-menu.component';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-devices',
@@ -21,15 +22,12 @@ export class DevicesPage implements OnInit {
     devicesList: EnvObserver[] = [];
 
     ngOnInit() {
+        console.log('onIinit');
         this.fetchDevices();
     }
 
     fetchDevices() {
-        // const envObs: EnvObserver = new EnvObserver('1', 'device 1');
-        // this.devicesList.push(envObs);
-
-        const observable = this.devicesService.getAssociatedDevices().subscribe(data => {
-            console.log(data);
+        const observable = this.devicesService.getAssociatedDevices().pipe(take(1)).subscribe(data => {
             this.devicesList = data;
         }, errors => {
             console.log(errors);

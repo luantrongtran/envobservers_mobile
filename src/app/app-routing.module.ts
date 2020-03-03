@@ -2,16 +2,15 @@ import {NgModule} from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {DetailsPageModule} from './devices/details/details.module';
 import {DevicesPageModule} from './devices/devices.module';
+import {AuthGuardService} from './auth-guard.service';
+import {DevicesPage} from './devices/devices.page';
 
 const routes: Routes = [
     {path: '', redirectTo: 'login', pathMatch: 'full'},
     {
         path: 'devices',
-        // component: DevicesPageModule
-        loadChildren: () => import('./devices/devices.module').then(m => m.DevicesPageModule)
-        // children: [
-        //     {path: 'details', component: DetailsPageModule}
-        // ]
+        loadChildren: () => import('./devices/devices.module').then(m => m.DevicesPageModule),
+        canLoad: [AuthGuardService]
     },
   {
     path: 'login',

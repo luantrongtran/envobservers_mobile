@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {API_SERVER} from '../environments/environment';
 import {UserInfo} from './models/UserInfo';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map, tap} from 'rxjs/operators';
+import {BehaviorSubject, from, Observable} from 'rxjs';
+import {map, switchMap, take, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import * as jwt_decode from 'jwt-decode';
+import {Storage} from '@ionic/storage';
 
 @Injectable({
     providedIn: 'root'
@@ -20,7 +21,7 @@ export class AuthService {
     // private $token: string;
     public userInfo = new BehaviorSubject<UserInfo>(null);
 
-    constructor(private httpClient: HttpClient, private router: Router) {
+    constructor(private httpClient: HttpClient, private router: Router, private storage: Storage) {
     }
 
     /**
@@ -46,6 +47,28 @@ export class AuthService {
     }
 
     /**
+     * This is to restore authentication data in storage. This can be used if the app is re-opened, but
+     * the user is not yet logged out
+     */
+    reLogIn() {
+        return from(this.storage.get('authData')).pipe(take(1), map(data => {
+            if (data) {
+                const userInfo = JSON.parse(data);
+                const objUserInfo = new UserInfo(userInfo.userId, userInfo.email, userInfo.name, userInfo.$token);
+                console.log(userInfo);
+
+                return objUserInfo;
+            }
+
+            return null;
+        }), tap(userInfo => {
+            this.userInfo.next(userInfo);
+        }), map(userInfo => {
+            return !!userInfo;
+        }));
+    }
+
+    /**
      * Send log request to backend server
      * @param email
      * @param password
@@ -64,10 +87,10 @@ export class AuthService {
             if (isNullOrUndefined(data.name)) {
                 name = data.name;
             }
-            this.setAuthData(decodedToken.user.userId, data.email, data.name,
+
+            this.setAuthData(decodedToken.user.userId, data.email, name,
                 data.token);
         }));
-
     }
 
     signup(email: string, password: string, confirmPassword: string) {
@@ -80,6 +103,7 @@ export class AuthService {
     }
 
     logout() {
+        this.storage.remove('authData');
         this.userInfo.next(null);
         this.router.navigateByUrl('/login');
     }
@@ -88,5 +112,18 @@ export class AuthService {
         const userInfo = new UserInfo(userId, email, name,
             token);
         this.userInfo.next(userInfo);
+
+        // persist the data
+        this.storage.set('authData', JSON.stringify(userInfo));
+    }
+
+    isAuthenticated() {
+        return this.userInfo.asObservable().pipe(take(1), map(userInfo => {
+            if (userInfo) {
+                return !!userInfo.token;
+            } else {
+                return false;
+            }
+        }));
     }
 }
