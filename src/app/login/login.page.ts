@@ -28,17 +28,21 @@ export class LoginPage implements OnInit {
             this.email = 'test@email.com';
             this.password = '123456';
         }
+        console.log('onInit login page');
 
-        this.authService.isAuthenticated().pipe(take(1)).subscribe(isAuthenticated => {
-            if (!isAuthenticated) {
-                this.authService.reLogIn().subscribe(isReLoggedInSuccessful => {
-                    this.popupUtilsService.presentToast(`${isAuthenticated}`);
-                    if (isReLoggedInSuccessful) {
-                        this.router.navigateByUrl('/devices');
-                    }
-                });
-            }
-        });
+        // this.authService.isAuthenticated().pipe(take(1)).subscribe(isAuthenticated => {
+        //     console.log('loginPage: ' + isAuthenticated);
+        //     if (!isAuthenticated) {
+        //         this.authService.reLogIn().subscribe(isReLoggedInSuccessful => {
+        //             console.log('loginPage relogin' + isReLoggedInSuccessful);
+        //             if (isReLoggedInSuccessful) {
+        //                 this.router.navigateByUrl('/devices');
+        //             }
+        //         });
+        //     }
+        // }, errors => {
+        //     console.log(errors);
+        // });
     }
 
     signIn() {

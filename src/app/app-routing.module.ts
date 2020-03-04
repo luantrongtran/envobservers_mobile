@@ -6,7 +6,7 @@ import {AuthGuardService} from './auth-guard.service';
 import {DevicesPage} from './devices/devices.page';
 
 const routes: Routes = [
-    {path: '', redirectTo: 'login', pathMatch: 'full'},
+    {path: '', redirectTo: 'devices', pathMatch: 'full'},
     {
         path: 'devices',
         loadChildren: () => import('./devices/devices.module').then(m => m.DevicesPageModule),
@@ -14,7 +14,8 @@ const routes: Routes = [
     },
     {
         path: 'login',
-        loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
+        loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule),
+        canLoad: [AuthGuardService]
     },
     {
         path: 'signup',

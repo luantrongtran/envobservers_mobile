@@ -22,7 +22,7 @@ export class DevicesPage implements OnInit {
     devicesList: EnvObserver[] = [];
 
     ngOnInit() {
-        console.log('onIinit');
+        console.log('onIinit Device Page');
         this.fetchDevices();
     }
 

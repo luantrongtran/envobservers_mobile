@@ -8,6 +8,7 @@ import {Router} from '@angular/router';
 import {isNullOrUndefined} from 'util';
 import * as jwt_decode from 'jwt-decode';
 import {Storage} from '@ionic/storage';
+import { Plugins } from '@capacitor/core';
 
 @Injectable({
     providedIn: 'root'
