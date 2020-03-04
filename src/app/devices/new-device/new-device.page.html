@@ -70,10 +70,16 @@
         <ion-card>
             <ion-card-header>Step 3: activate new device</ion-card-header>
             <ion-card-content>
-                Device info:
+                Click the activate button to activate the device
+                <div *ngIf="isActivated()">
+                    <ion-text>
+                        Device activated
+                    </ion-text>
+                </div>
                 <div *ngFor="let err of step3Errors" color="danger">
                     <ion-text>{{err.msg}}</ion-text>
                 </div>
+
             </ion-card-content>
         </ion-card>
         <div class="button-list">

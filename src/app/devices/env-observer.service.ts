@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {timeout} from 'rxjs/operators';
+import {take, tap, timeout} from 'rxjs/operators';
 
 
 @Injectable({
@@ -34,7 +34,8 @@ export class EnvObserverService {
      * This is to activate a brand new EnvObserver device.
      */
     activateNewDevice(userId: string): Observable<any> {
+        const timestamp = new Date().getTime();
         const url = `${EnvObserverService.ACTIVATE_API_URL}?ownerId=${userId}`;
-        return this.httpClient.get(url);
+        return this.httpClient.post(url, {}).pipe(take(1));
     }
 }

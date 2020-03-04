@@ -4,6 +4,8 @@ import {Router} from '@angular/router';
 import * as jwt_decode from 'jwt-decode';
 import {UserInfo} from '../models/UserInfo';
 import {DEBUG_MODE} from '../../environments/environment';
+import {take} from 'rxjs/operators';
+import {PopupUtilsService} from '../popup-utils.service';
 
 @Component({
     selector: 'app-login',
@@ -18,7 +20,7 @@ export class LoginPage implements OnInit {
 
     isLoading = false;
 
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private authService: AuthService, private router: Router, private popupUtilsService: PopupUtilsService) {
     }
 
     ngOnInit() {
@@ -26,6 +28,17 @@ export class LoginPage implements OnInit {
             this.email = 'test@email.com';
             this.password = '123456';
         }
+
+        this.authService.isAuthenticated().pipe(take(1)).subscribe(isAuthenticated => {
+            if (!isAuthenticated) {
+                this.authService.reLogIn().subscribe(isReLoggedInSuccessful => {
+                    this.popupUtilsService.presentToast(`${isAuthenticated}`);
+                    if (isReLoggedInSuccessful) {
+                        this.router.navigateByUrl('/devices');
+                    }
+                });
+            }
+        });
     }
 
     signIn() {
@@ -33,7 +46,6 @@ export class LoginPage implements OnInit {
         const sub = this.authService.login(this.email, this.password).subscribe(data => {
             this.router.navigateByUrl('/devices');
         }, errors => {
-            console.log(errors);
             if (errors.error && errors.error.errors) {
                 this.errors = errors.error.errors;
             }

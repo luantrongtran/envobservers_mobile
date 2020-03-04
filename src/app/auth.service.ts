@@ -55,7 +55,6 @@ export class AuthService {
             if (data) {
                 const userInfo = JSON.parse(data);
                 const objUserInfo = new UserInfo(userInfo.userId, userInfo.email, userInfo.name, userInfo.$token);
-                console.log(userInfo);
 
                 return objUserInfo;
             }

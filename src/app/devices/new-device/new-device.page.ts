@@ -4,6 +4,7 @@ import {take, timeout} from 'rxjs/operators';
 import {PopupUtilsService} from '../../popup-utils.service';
 import {AuthService} from '../../auth.service';
 import {error, isNull, isNullOrUndefined} from 'util';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-new-device',
@@ -43,7 +44,7 @@ export class NewDevicePage implements OnInit {
     step3Errors = [];
 
     constructor(private envObserverService: EnvObserverService, private popupUtilsService: PopupUtilsService,
-                private authService: AuthService) {
+                private authService: AuthService, private router: Router) {
     }
 
     ngOnInit() {
@@ -94,19 +95,33 @@ export class NewDevicePage implements OnInit {
      */
     activateDevice() {
         this.isLoading = true;
-        const sub = this.authService.getUserInfo().pipe(take(1)).subscribe(userInfo => {
+        const sub = this.authService.userInfo.asObservable().pipe(take(1)).subscribe(userInfo => {
             if (isNullOrUndefined(userInfo) || isNullOrUndefined(userInfo.userId)) {
                 this.popupUtilsService.presentToast('Failed to activate the device');
                 this.isLoading = false;
                 return;
             }
 
-            this.envObserverService.activateNewDevice(userInfo.userId).subscribe(data => {
+            /**
+             * THere is a problem which send the activate-device request twice to the EnvObserver device
+             */
+            this.envObserverService.activateNewDevice(userInfo.userId).pipe(take(1)).subscribe(data => {
                 console.log(data);
-                if (data.msg) {
-                    this.popupUtilsService.presentToast(data.msg);
-                }
-                this.isLoading = false;
+                // if (data.msg) {
+                //     this.popupUtilsService.presentToast(data.msg);
+                // }
+
+                this.envObserverService.getInfo().pipe(take(1)).subscribe(deviceInfo => {
+                    this.deviceInfo = deviceInfo;
+                    if (this.isActivated()) {
+                        this.popupUtilsService.presentToast('Device activated successfully');
+                        this.router.navigateByUrl('/devices');
+                    } else {
+                        this.popupUtilsService.presentToast('Failed to activate the device');
+                    }
+
+                    this.isLoading = false;
+                });
             }, errors => {
                 // this.step3Errors.push(errors.msg);
                 this.popupUtilsService.presentToast(errors.msg);
