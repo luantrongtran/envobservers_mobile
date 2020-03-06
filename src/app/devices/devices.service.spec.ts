@@ -25,11 +25,5 @@ describe('DevicesService', () => {
     });
 
     it ('Should return something', () => {
-      let observable = devicesService.getDataByDeviceId();
-      observable.subscribe(resData => {
-        console.log('t');
-      }, error => {
-        console.log(error);
-      });
     });
 });

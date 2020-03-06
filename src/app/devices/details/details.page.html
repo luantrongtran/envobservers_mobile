@@ -4,7 +4,7 @@
             <ion-back-button [defaultHref]="['/devices']"></ion-back-button>
         </ion-buttons>
         <ion-buttons slot="end">
-            <ion-button>
+            <ion-button [routerLink]="['/devices/settings', deviceInfo._id, deviceInfo.name]">
                 <ion-icon size-md="6" name="settings"></ion-icon>
             </ion-button>
             <ion-button *ngIf="isLoading">

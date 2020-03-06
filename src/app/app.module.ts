@@ -13,9 +13,10 @@ import {AddAuthenticationHeaderInterceptorService} from './interceptors/add-auth
 import {ProfilePopupMenuComponent} from './devices/profile-popup-menu/profile-popup-menu.component';
 import {IonicStorageModule} from '@ionic/storage';
 import {AuthGuardService} from './auth-guard.service';
+import {MilltosecondsComponent} from './custominputs/milltoseconds/milltoseconds.component';
 
 @NgModule({
-    declarations: [AppComponent, ProfilePopupMenuComponent],
+    declarations: [AppComponent, ProfilePopupMenuComponent, MilltosecondsComponent],
     entryComponents: [],
     imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, IonicStorageModule.forRoot()],
     providers: [

@@ -3,6 +3,7 @@ import {DevicesService} from '../devices.service';
 import {EnvObserver} from '../../models/EnvObserver';
 import {ActivatedRoute, Params} from '@angular/router';
 import {EnvObserverData} from '../../models/EnvObserverData';
+import {take} from 'rxjs/operators';
 
 @Component({
     selector: 'app-details',
@@ -28,7 +29,7 @@ export class DetailsPage implements OnInit {
     ngOnInit() {
         console.log('init details page');
 
-        this.activatedRoute.params.subscribe((params: Params) => {
+        this.activatedRoute.params.pipe(take(1)).subscribe((params: Params) => {
             const deviceName = params['deviceName'];
             const deviceId = params['deviceId'];
             this.deviceInfo = new EnvObserver(deviceId, deviceName);

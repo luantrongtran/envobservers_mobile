@@ -19,6 +19,10 @@ const routes: Routes = [
         path: 'new-device',
         loadChildren: () => import('./new-device/new-device.module').then(m => m.NewDevicePageModule),
         canLoad: [AuthGuardService]
+    },
+    {
+        path: 'settings/:deviceId/:deviceName',
+        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsPageModule)
     }
 ];
 

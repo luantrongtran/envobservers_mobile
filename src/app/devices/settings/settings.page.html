@@ -1,0 +1,94 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{pageTitle}} - settings</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button [defaultHref]="['/devices']"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item-group>
+            <ion-item-divider>
+                Device Info
+            </ion-item-divider>
+            <ion-item>
+                <ion-label position="stacked">ID</ion-label>
+                <ion-input readonly="" [ngModel]="deviceInfo._id"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Name</ion-label>
+                <ion-input type="text" name="deviceName" [(ngModel)]="deviceName"
+                           [readonly]="!isNamedChangeEnabled">
+                </ion-input>
+
+                <ion-buttons slot="end">
+                    <ion-button color="primary" float-right item-right *ngIf="!isNamedChangeEnabled"
+                                (click)="enableNameChanging()">
+                        Change
+                    </ion-button>
+                    <ion-button clear item-right *ngIf="isNamedChangeEnabled" (click)="cancelSaveName()">Cancel
+                    </ion-button>
+                    <ion-button color="primary" clear item-right *ngIf="isNamedChangeEnabled" (click)="saveName()">
+                        Save
+                    </ion-button>
+                </ion-buttons>
+            </ion-item>
+        </ion-item-group>
+
+        <ion-item-group margin-top="10px">
+            <ion-item-divider>
+                Configs
+            </ion-item-divider>
+            <ion-item>
+                <ion-label position="stacked">Temperature Upload Interval (in minutes)</ion-label>
+<!--                <ion-input type="text" name="pollingInterval" [(ngModel)]="newDeviceInfo.options.pollingInterval">-->
+<!--                </ion-input>-->
+            </ion-item>
+        </ion-item-group>
+    </ion-list>
+    <!--    <ion-grid>-->
+    <!--        <ion-row>-->
+    <!--            <ion-col>-->
+    <!--                <ion-item-divider>-->
+    <!--                    Device Info-->
+    <!--                </ion-item-divider>-->
+    <!--            </ion-col>-->
+    <!--        </ion-row>-->
+    <!--        <ion-row>-->
+    <!--            <ion-item>-->
+    <!--                <ion-label float-left position="floating">Device name</ion-label>-->
+    <!--                <ion-input type="text" name="deviceName" [(ngModel)]="deviceName"-->
+    <!--                           [readonly]="!isNamedChangeEnabled">-->
+    <!--                </ion-input>-->
+    <!--            </ion-item>-->
+
+    <!--            <ion-button clear item-right *ngIf="!isNamedChangeEnabled"-->
+    <!--                        (click)="enableNameChanging()">-->
+    <!--                Change-->
+    <!--            </ion-button>-->
+    <!--            <ion-button clear item-right *ngIf="isNamedChangeEnabled" (click)="cancelSaveName()">Cancel-->
+    <!--            </ion-button>-->
+    <!--            <ion-button clear item-right *ngIf="isNamedChangeEnabled" (click)="saveName()">Save</ion-button>-->
+    <!--        </ion-row>-->
+
+    <!--        <ion-row>-->
+    <!--            <ion-item-divider>-->
+    <!--                Configurations-->
+    <!--            </ion-item-divider>-->
+    <!--        </ion-row>-->
+
+    <!--        <ion-row>-->
+    <!--            <ion-col>-->
+    <!--                <ion-item>-->
+    <!--                    <ion-label float-left position="floating" style="vertical-align: middle">Polling interval-->
+    <!--                    </ion-label>-->
+    <!--                    <ion-input type="number">-->
+    <!--                    </ion-input>-->
+    <!--                </ion-item>-->
+    <!--            </ion-col>-->
+    <!--        </ion-row>-->
+    <!--    </ion-grid>-->
+
+</ion-content>

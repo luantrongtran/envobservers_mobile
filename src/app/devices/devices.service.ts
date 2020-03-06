@@ -4,8 +4,8 @@ import {EnvObserverData} from '../models/EnvObserverData';
 import {API_SERVER} from '../../environments/environment';
 import {AuthService} from '../auth.service';
 import {isNullOrUndefined} from 'util';
-import {Observable} from 'rxjs';
-import {switchMap, take} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, switchMap, take} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -16,6 +16,11 @@ export class DevicesService {
     static readonly getDataByDeviceId = DevicesService.baseUrl + '/getData';
 
     constructor(private httpClient: HttpClient, private authService: AuthService) {
+    }
+
+    findDeviceById(deviceId: string): Observable<any> {
+        const url = `${DevicesService.baseUrl}/${deviceId}`;
+        return this.httpClient.get(url);
     }
 
     /**
@@ -44,6 +49,18 @@ export class DevicesService {
             }
 
             return this.httpClient.get(DevicesService.baseUrl);
+        }));
+    }
+
+    updateDeviceName(deviceId: string, deviceName: string): Observable<boolean> {
+        const reqBody = {
+            deviceId, deviceName
+        };
+
+        return this.httpClient.post(DevicesService.baseUrl, reqBody).pipe(take(1), switchMap(resData => {
+            return of(true);
+        }), catchError(err => {
+            return of(false);
         }));
     }
 }
