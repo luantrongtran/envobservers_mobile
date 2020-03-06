@@ -63,4 +63,25 @@ export class DevicesService {
             return of(false);
         }));
     }
+
+    updateDeviceSettings(deviceId, options): Observable<boolean> {
+        const reqBody = {
+            deviceId,
+            options
+        };
+
+        return this.httpClient.post(DevicesService.baseUrl, reqBody).pipe(take(1), switchMap(resData => {
+            return of(true);
+        }), catchError(err => {
+            return of(false);
+        }));
+
+        // return this.httpClient.post(DevicesService.baseUrl, reqBody).pipe(take(1), switchMap(resData => {
+        //     console.log('resData');
+        //     return of(true);
+        // }), catchError(err => {
+        //     console.log('resData');
+        //     return of(false);
+        // }));
+    }
 }

@@ -26,6 +26,9 @@ import {MilltosecondsComponent} from './custominputs/milltoseconds/milltoseconds
         {provide: HTTP_INTERCEPTORS, useClass: AddAuthenticationHeaderInterceptorService, multi: true},
         AuthGuardService
     ],
+    exports: [
+        ProfilePopupMenuComponent
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

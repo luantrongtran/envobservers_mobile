@@ -4,7 +4,13 @@ export class EnvObserver {
     _id: string;
     name: string;
     data: EnvObserverData[];
-    options = {};
+    options: {
+        pollingInterval: number,
+        timeOffset: string
+    } = {
+        pollingInterval: 0,
+        timeOffset: ''
+    };
 
     constructor(deviceId: string, deviceName: string) {
         this._id = deviceId;

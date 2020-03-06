@@ -13,11 +13,11 @@ export class MilltosecondsComponent implements OnInit {
     eventTriggered = new EventEmitter<{value: number}>();
 
     @Input()
-    set value(value: number) {
+    set inputValue(value: number) {
         this.$value = Math.round(value / 1000);
     }
 
-    get value() {
+    get inputValue() {
         return this.$value;
     }
 

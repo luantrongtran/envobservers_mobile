@@ -4,6 +4,7 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {EnvObserver} from '../../models/EnvObserver';
 import {DevicesService} from '../devices.service';
 import {PopupUtilsService} from '../../popup-utils.service';
+import {MilltosecondsComponent} from '../../custominputs/milltoseconds/milltoseconds.component';
 
 @Component({
     selector: 'app-settings',
@@ -32,6 +33,7 @@ export class SettingsPage implements OnInit {
     fetchLatestDeviceInfo() {
         this.devicesService.findDeviceById(this.deviceInfo._id).subscribe(resData => {
             if (resData) {
+                console.log();
                 const options = JSON.parse(resData.options);
                 this.deviceInfo = resData;
                 this.deviceInfo.options = options;
@@ -72,8 +74,24 @@ export class SettingsPage implements OnInit {
             } else {
                 this.popupUtilsService.presentToast('Failed to update device name');
 
-                this.deviceName = this.deviceInfo.name;
+                // this.deviceName = this.deviceInfo.name;
                 this.isNamedChangeEnabled = false;
+            }
+        });
+    }
+
+    saveSettings() {
+        if (!this.newDeviceInfo.options) {
+            return;
+        }
+
+        this.devicesService.updateDeviceSettings(this.newDeviceInfo._id, this.newDeviceInfo.options).subscribe(isSuccessful => {
+            console.log(isSuccessful);
+            if (isSuccessful) {
+                this.popupUtilsService.presentToast('Settings has been updated');
+                this.deviceInfo.options = this.newDeviceInfo.options;
+            } else {
+                this.popupUtilsService.presentToast('Failed to update device name');
             }
         });
     }
